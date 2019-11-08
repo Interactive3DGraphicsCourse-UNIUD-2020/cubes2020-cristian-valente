@@ -68,14 +68,10 @@
 			renderer.setClearColor( 0xf0f0f0 );
 			document.body.appendChild( renderer.domElement );
 			
-			camera.position.set(3,4,6);
+			camera.position.set(18,24,36);
 			camera.lookAt( new THREE.Vector3(0,0,0));
 			
-			var geometry = new THREE.BoxGeometry(1,1,1);
-			var material = new THREE.MeshBasicMaterial( { color: 0xaaaaaa } );
-			var cube = new THREE.Mesh( geometry, material );
-			
-			scene.add( cube );
+
 			
 			stats = new Stats();
 			stats.domElement.style.position = 'absolute';
@@ -96,11 +92,181 @@
 				var data = getHeightData(img,0.1);
   
 				// load img source
-				img.src = "textures/heightmap2.png";
+				img.src = "textures/heightmap2.png";}
+
+				paintSand();
 			}
+
+
+			function paintSand(){
+							    	var sand = new THREE.BoxBufferGeometry(1,1,1);
+			    	for(var w=23; w>-21; w-=1){
+			    	for(var h=-5; h>-27.5; h-=1){
+			    			var hue = getRandomInt(55,65);
+			    			var sat = getRandomInt (55,65); 
+			    			var lig = getRandomInt (55,65); 
+			    			smat = new THREE.MeshBasicMaterial({color : 'hsl('+hue+','+sat+'%,'+lig+'%)'});
+			    			var s = new THREE.Mesh(sand,smat);
+			    			s.position.set(w,-0.5,h);
+			    			scene.add(s);
+			    		}} 
+			}
+
 			
 			
-		}
+			function paintRocks(){
+			    	var RockGeo1 = new THREE.BoxBufferGeometry(10,10,10);
+			    	var RockGeo2 = new THREE.BoxBufferGeometry(8,8,8);
+			    	var RockGeo3 = new THREE.BoxBufferGeometry(6,6,6);
+			    	var RockGeo4 = new THREE.BoxBufferGeometry(7,7,7);
+			    	var RockGeo5 = new THREE.BoxBufferGeometry(5,5,5);
+			    	var mat = new THREE.MeshBasicMaterial({color : 'rgb(165, 165, 165)'});
+
+			    	var Rock1= new THREE.Mesh(RockGeo1,mat);
+			    	var Rock3= new THREE.Mesh(RockGeo3,mat);
+			    	var Rock2= new THREE.Mesh(RockGeo2,mat);
+			    	var Rock4= new THREE.Mesh(RockGeo4,mat);
+			    	var Rock5= new THREE.Mesh(RockGeo5,mat);
+			    	var Rock6= new THREE.Mesh(RockGeo4,mat);
+			    	var Rock7= new THREE.Mesh(RockGeo5,mat);
+
+			    	Rock1.position.set(0,5,-25);
+			    	defineFront(Rock1,1);
+			    	defineUpper(Rock1,1);
+			    	defineSide(Rock1,Rock3,1,-1);
+			    	defineSide(Rock1,Rock2,1,1);
+
+			    	Rock2.position.set(9,4,-26);
+			    	defineFront(Rock2,1);
+			    	defineUpper(Rock2,1);
+
+			    	Rock3.position.set(-8,3,-27);
+			    	defineFront(Rock3,1);
+			    	defineUpper(Rock3,1);
+
+			    	Rock4.position.set(-11.5,3.5,-26.5);
+			    	defineFront(Rock4,1);
+			    	defineUpper(Rock4,1);
+			    	defineSide(Rock4,Rock7,1,-1);
+
+			    	Rock5.position.set(15.5,2.5,-27.5);
+			    	defineFront(Rock5,1);
+			    	defineUpper(Rock5,1);
+			    	defineSide(Rock2,Rock5,1,1);
+
+			    	Rock6.position.set(19,3.5,-26.5);
+			    	defineFront(Rock6,1);
+			    	defineUpper(Rock6,1);defineSide(Rock6,Rock5,1,-1);
+
+			    	Rock7.position.set(-17.5,2.5,-27.5);
+			    	defineFront(Rock7,1);
+			    	defineUpper(Rock7,1);
+
+			    	scene.add(Rock1);
+			    	scene.add(Rock2);
+			    	scene.add(Rock3);
+			    	scene.add(Rock4);
+			    	scene.add(Rock5);
+			    	scene.add(Rock6);
+			    	scene.add(Rock7);
+			    	
+			    }
+
+
+
+			function defineUpper(obj,size){
+
+			    var RockGeo = new THREE.BoxBufferGeometry(size,size,size);
+				var index = obj.geometry.parameters.width;
+
+				for(var i=index; i>0; i-=size){
+					for(var j=index+1; j>0; j-=size){
+
+						var greyScale = getRandomInt(165,190);
+						var depth = getRandomInt(2,9)/10;
+						var rockCol = new THREE.Color("rgb("+greyScale+","+greyScale+","+greyScale+")");
+						var mat = new THREE.MeshBasicMaterial({color: rockCol});
+						var frag = new THREE.Mesh(RockGeo,mat);
+
+        				obj.add(frag);
+        				var pIx = (index + size )/2 - 0.001;
+        				frag.position.set(i-pIx,pIx-size+depth,j-pIx,);
+						}}
+					}
+
+				function defineFront(obj,size){
+
+			    var RockGeo = new THREE.BoxBufferGeometry(size,size,size);
+				var index = obj.geometry.parameters.width;
+
+				for(var i=index; i>0; i-=size){
+					for(var j=index; j>0; j-=size){
+						var greyScale = getRandomInt(165,180);
+						var depth = getRandomInt(2,9)/10;
+						var rockCol = new THREE.Color("rgb("+greyScale+","+greyScale+","+greyScale+")");
+						var mat = new THREE.MeshBasicMaterial({color: rockCol});
+						var frag = new THREE.Mesh(RockGeo,mat);
+
+        				obj.add(frag);
+        				var pIx = (index + size )/2 - 0.001;
+        				frag.position.set(i-pIx,j-pIx,pIx-size+depth);
+						}}
+					}
+
+			 function defineSide(obj,objm,size,side){
+
+			    var RockGeo = new THREE.BoxBufferGeometry(size,size,size);
+			    var index =  obj.geometry.parameters.width;
+			    var end = 	objm.geometry.parameters.width;
+
+				for(var i=index; i>end; i-=size){
+					for(var j=index+1; j>0; j-=size){
+
+						var greyScale = getRandomInt(165,190);
+						var depth = getRandomInt(2,9)/10;
+						var rockCol = new THREE.Color("rgb("+greyScale+","+greyScale+","+greyScale+")");
+						var mat = new THREE.MeshBasicMaterial({color: rockCol});
+						var frag = new THREE.Mesh(RockGeo,mat);
+
+        				obj.add(frag);
+        				var pIx = (index + size )/2- 0.001;
+        				frag.position.set(side*(pIx-size+depth),i-pIx,j-pIx,);
+						}}
+				for(var i=index; i>0; i-=size){
+					for(var j=index; j>end; j-=size){
+
+						var greyScale = getRandomInt(165,190);
+						var depth = getRandomInt(2,9)/10;
+						var rockCol = new THREE.Color("rgb("+greyScale+","+greyScale+","+greyScale+")");
+						var mat = new THREE.MeshBasicMaterial({color: rockCol});
+						var frag = new THREE.Mesh(RockGeo,mat);
+
+        				obj.add(frag);
+        				var pIx = (index + size )/2- 0.001;
+        				frag.position.set(side*(pIx-size+depth),i-pIx,j-pIx,);
+						}}
+					}
+
+
+
+
+
+       	function getRandom(min, max) {
+       		return Math.random() * (max - min) + min;
+       	}
+
+
+
+
+		function getRandomInt(min, max) {
+			min = Math.ceil(min);
+  			max = Math.floor(max);
+  			return Math.floor(Math.random() * (max - min)) + min; //Il max è escluso e il min è incluso
+			}
+
+
+
+
 		
 		function Update() {
 			requestAnimationFrame( Update );
