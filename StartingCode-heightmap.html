@@ -5,7 +5,7 @@
 
 		body {
 			font-family: Monospace;
-			background-color: #f0f0f0;
+			background-color: #97DBD1;
 			margin: 0px;
 			overflow: hidden;
 		}
@@ -38,11 +38,10 @@
 		    var context = canvas.getContext( '2d' );
 
 		    var size = img.width * img.height;
-			console.log(size);
 		    var data = new Float32Array( size );
 
 		    context.drawImage(img,0,0);
-
+				scene.background = new THREE.Color( 0x97DBD1 );
 		    for ( var i = 0; i < size; i ++ ) {
 		        data[i] = 0
 		    }
@@ -70,11 +69,8 @@
 			camera.position.set(3,4,6);
 			camera.lookAt( new THREE.Vector3(0,0,0));
 
-			var geometry = new THREE.BoxGeometry(1,1,1);
-			var material = new THREE.MeshBasicMaterial( { color: 0xaaaaaa } );
-			var cube = new THREE.Mesh( geometry, material );
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-			scene.add( cube );
 
 			stats = new Stats();
 			stats.domElement.style.position = 'absolute';
@@ -84,40 +80,92 @@
 			// uncomment if you need to draw coordinate axes when building the scene
 			//Coordinates.drawAllAxes();
 
-			controls = new THREE.OrbitControls( camera );
-			controls.addEventListener( 'change', Render );
+
+
 
 			// terrain
-			var img = new Image();
-			img.onload = function () {
+		  var img = new Image();
+		  img.onload = function () {
 
-				//get height data from img
-				var data = getHeightData(img,0.1);
+		      //get height data from img
+		    var data = getHeightData(img,0.3);
+				createTerrain(data);
 
-				// load img source
-				img.src = "textures/Terrain.jpg";
-			}
-			createTerrain(data);
+		  };
+		  // load img source
+		  img.src = "textures/TerrainMid.jpg";
+
 
 
 		}
 
 		function createTerrain(data){
-		var size = data.lenght;
-		var acapo =  Math.sqrt(size);
-		var x = 0 ;
-		var y = 0;
-		for(var i=0;i<size;i++){
-			var mat = new THREE.MeshBasicMaterial({color: black});
-			var geo = new THREE.BoxBufferGeometry(1,1,1);
-			var cube = new THREE.Mesh(geo,mat);
-			cube.position.set(x,y,0);
-			if(x==acapo){
-				m=0;
-				y++;}
-			}
+			var size = data.length;
+			var acapo =  Math.sqrt(size);
+
+			var x = 0 ;
+			var y = 0	;
+			var best = data[0];
+			var lowest = best;
+
+			for(var i=0;i<size;i++){
+
+				var color = choosecolor(data[i]);
+				var mat = new THREE.MeshBasicMaterial({color: color});
+				var geo = new THREE.BoxBufferGeometry(1,1,1);
+				var cube = new THREE.Mesh(geo,mat);
+				if(data[i]>best){
+					best=data[i];
+				}
+				if(data[i]<lowest){
+					lowest=data[i];
+				}
+				scene.add(cube);
+				cube.position.set(x,data[i]/2.3,y);
+				x++;
+				if(x==acapo){
+					x=0;
+					y++;}
+				}
+
+				console.log(best,lowest);
 
 		}
+
+		function choosecolor(value){
+
+			if(value<=1){ return 0x000055;
+
+
+			}else if(value<=3 && value>1){  return 0x0000ff;
+
+
+			}else if(value<=5 && value>3){ return 0x00ffff;
+
+
+			}else if(value<=7 && value>5){return 0xc7bb6b;
+
+
+			}else  if(value<=9 && value>7){return 0xe6d45c;
+
+
+			}else  if(value<=12 && value>9){return 0X00dd00;
+
+			}else  if(value<=18 && value>12){return 0x7a3b26;
+
+			}else  if(value<=22 && value>18){return 0X522a1d;
+
+			}else  if(value<=23 && value>22){return 0X5f8f5b;
+
+			}else  if(value<=29 && value>23){return 0x99887f;
+
+			}else  if(value<=36 && value>29){return 0xffffff;}
+
+
+
+		}
+
+
 
 
 		function Update() {
