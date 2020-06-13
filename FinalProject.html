@@ -59,6 +59,7 @@
 			stats.domElement.style.top = '0px';
 			document.body.appendChild( stats.domElement );
 
+
 			hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.21 );
 			hemiLight.color.setHSL( 0.6, 1, 0.6 );
 			hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
@@ -72,6 +73,8 @@
 			dirLight.castShadow = true;
 			dirLight.shadow.mapSize.width = 1024;
 			dirLight.shadow.mapSize.height = 1024;
+
+
 
 
 			// terrain
@@ -253,7 +256,7 @@
 
 					var random = getRndInteger(0,4);
 					var ran = random/10;
-					var geo = new THREE.BoxBufferGeometry(0.45,0.5,0.45);
+					var geo = new THREE.BoxBufferGeometry(0.45,0.45,0.45);
 					var cube = new THREE.Mesh(geo,mat);
 					if(j==0){
 						cube.position.set(frag.position.x + 0.25+1,frag.position.y+ran-0.5, frag.position.z + 0.25);
@@ -273,7 +276,7 @@
 
 
 
-		function move(angle,height,object){
+		function moveSea(angle,height,object){
 
 			for(var i=0;i<object.length;i++){
 				var frag= object[i];
@@ -368,8 +371,7 @@
 					dirLight.color.set( 0xFA9D9D );
 				}
 
-				console.log(dirLight.position.x,dirLight.position.y,dirLight.position.z);
-				move(angle,0.25,sea);
+				moveSea(angle,0.25,sea);
 				moveFoam(angle,foam);
 				angle+=0.3;
 				time= now;
