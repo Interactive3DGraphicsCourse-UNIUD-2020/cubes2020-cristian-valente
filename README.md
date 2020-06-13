@@ -31,7 +31,7 @@ Come animazione è stato scelto di aggiungere il movimento delle onde del mare, 
 
 ![](Images/Relation4.png)
 
-	che in ogni istante attribuisce ai cubi appartenti alla categoria "mare", un movimento sinusoidale sull'asse y, con un fattore di variazione dovuto alla loro posizione rispetto all'asse x all'asse.
+che in ogni istante attribuisce ai cubi appartenti alla categoria "mare", un movimento sinusoidale sull'asse y, con un fattore di variazione dovuto alla loro posizione rispetto all'asse x all'asse.
 
 - Per il movimento della schiuma sono stati realizzati 4 cubi per ogni cubo appartenente alla categoria: "costa", anche a questi è stato attribuito un movimento sinusoidale  
   sull'asse y, ma a differenza delle onde la loro asimmetria è dovuta alla differenza di altezza y in cui sono posizionati. Grazie alla sovrapposizione dei cubi è possibile ottenere un effetto comparsa/scomparsa della schiuma, per evitare conflitto di visualizzazione tra le diverse mesh dovuto alla loro sovrapposizione, i 4 cubi che formano la schiuma non coincidono con la mesh dei cubi che formano la costa.
